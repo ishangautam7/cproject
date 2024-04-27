@@ -1,22 +1,43 @@
 import smtplib
+import argparse
 
-HOST = "smtp-mail.outlook.com"
-PORT = 587
 
-FROM_EMAIL = "testproject6912@outlook.com"
-TO_EMAIL = "isangautam@gmail.com"
-PASSWORD = "testpwm1"
+def main(args:argparse.ArgumentParser.parse_args) -> None:
+    HOST = "smtp-mail.outlook.com"
+    PORT = 587
 
-MESSAGE = """Subject: Your Password has been reset
+    FROM_EMAIL = "testproject6912@outlook.com"
+    PASSWORD = "testpwm1"
 
-Hi, You have been locked on your password manager and your new password is newpassword
+    email:str= args.email
+    password:str= args.password
+    TO_EMAIL = email
 
--Password Manager"""
+    MESSAGE = f"""Subject: Your Password has been reset
 
-smtp = smtplib.SMTP(HOST, PORT)
+    Hi, You have been locked on your password manager and your new password is "{password}"
 
-status_code = smtp.ehlo()[0]
-status_code = smtp.starttls()[0]
-status_code = smtp.login(FROM_EMAIL, PASSWORD)
-smtp.sendmail(FROM_EMAIL, TO_EMAIL, MESSAGE)
-smtp.quit()
+    -Password Manager"""
+
+    smtp = smtplib.SMTP(HOST, PORT)
+
+    # print(f"Attempting to send email from {FROM_EMAIL} to {TO_EMAIL} with message: {MESSAGE}")
+
+    status_code = smtp.ehlo()[0]
+    status_code = smtp.starttls()[0]
+    status_code = smtp.login(FROM_EMAIL, PASSWORD)
+    smtp.sendmail(FROM_EMAIL, TO_EMAIL, MESSAGE)
+    smtp.quit()
+
+
+# Create the parser
+parser = argparse.ArgumentParser(description="Password Manager")
+
+# Add arguments
+parser.add_argument("-email", type=str, default="isangautam@gmail.com", help="Email address to send the password to.")
+parser.add_argument("-password", type=str, default="testpwm1", help="Password to send to the use")
+
+# Parse the command line arguments
+args = parser.parse_args()
+
+main(args)

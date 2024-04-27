@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>
+// #include <ctype.h>
 #include <stdbool.h>
 
 // Function to save password
@@ -94,9 +94,9 @@ void deletePassword()
 }
 
 // Function to generate a random password
-void generatePassword(char password[] ,int length)
+void generatePassword(char password[], int length)
 {
-    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$^&*()-_=+";
     const int charsetLength = strlen(charset);
 
     srand(time(NULL));
@@ -107,16 +107,36 @@ void generatePassword(char password[] ,int length)
     }
     password[length] = '\0';
 
-    printf("Generated password: %s\n", password);
+    printf("Password Generated\n\n");
+}
+
+void sendMail(char email[], char password[])
+{
+    char command[200] = "python main.py -email   ";
+    strcat(command, email);
+    strcat(command, " -password    ");
+    strcat(command, password);
+    // printf("\n%s\n",command);
+    system(command);
+
+    FILE *fx = fopen("admin.txt", "w");
+    fprintf(fx, "%s\n", password);
+    fclose(fx);
+
 }
 
 int main()
 {
-    char adminPassword[] = "admin";
+    // char adminPassword[] = "admin";
+    FILE *fz = fopen("admin.txt", "r");
+    char adminPassword[100];
+    fscanf(fz, "%s", adminPassword);
+    // file -> adminPass -> initall
+    // y a'admin' ->
     char password[100];
     int attempts = 0;
-    const int maxAttempts = 3;
-    char email[100];
+    const int maxAttempts = 3;  
+    char email[100] = "isangautam@gmail.com";
     bool emailVerified = false;
 
     // while (!emailVerified && attempts < maxAttempts)
@@ -132,7 +152,8 @@ int main()
             k++;
             printf("*");
         }
-        if (strcmp(password, adminPassword) == 0)
+        // while( != EOF " adifsa" ,&admin)
+        if (strcmp(pass, adminPassword) == 0)
         {
             int choice;
             while (1)
@@ -164,7 +185,10 @@ int main()
                     int length;
                     printf("Enter length of the password: ");
                     scanf("%d", &length);
-                    generatePassword(length);
+                    char passwd[length + 1];
+                    generatePassword(passwd, length);
+
+                    printf("Generated password: %s\n", password);
                     break;
                 }
                 case 6:
@@ -178,15 +202,17 @@ int main()
         {
             attempts++;
             printf("Invalid password. Attempts left: %d\n", maxAttempts - attempts);
+            if (attempts == maxAttempts)
+            {
+                printf("Maximum attempts reached. Check your mail to reset your password\n");
+                generatePassword(password,9);
+                sendMail(email, password);
+                // file -> overwrite pasword;
+                return 0;
+            }
         }
     }
-    if (attempts == maxAttempts)
-    {
-        printf("Maximum attempts reached. Check your mail to reset your password\n");
-        char command[100] = "python main.py -email isangautam@gmail.com -password ";
-        char password[10] = generatePassword(9);
-        strcat(command, password);
-    }
+
 
     return 0;
 }
