@@ -35,7 +35,7 @@ parser = argparse.ArgumentParser(description="Password Manager")
 
 # Add arguments
 parser.add_argument("-email", type=str, default="isangautam@gmail.com", help="Email address to send the password to.")
-parser.add_argument("-password", type=str, default="testpwm1", help="Password to send to the use")
+parser.add_argument("-password", type=str, default="Your Password", help="Password to send to the use")
 
 # Parse the command line arguments
 args = parser.parse_args()
