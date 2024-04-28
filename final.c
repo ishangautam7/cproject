@@ -6,6 +6,14 @@
 // #include <ctype.h>
 #include <stdbool.h>
 
+void xorEncrypt(char* password)
+{
+    int len = strlen(password);
+    for(int i = 0; i < len; i++)
+    {
+        password[i] ^= 22;
+    }
+}
 // Function to save password
 void savePassword()
 {
@@ -14,6 +22,7 @@ void savePassword()
     scanf("%s", site);
     printf("Enter password: ");
     scanf("%s", password);
+    xorEncrypt(password);
     FILE *file = fopen("passwords.txt", "a");
     fprintf(file, "%s %s\n", site, password);
     fclose(file);
@@ -25,7 +34,8 @@ void displayPasswords()
     FILE *file = fopen("passwords.txt", "r");
     char site[100], password[100];
     while (fscanf(file, "%s %s", site, password) != EOF)
-    {
+    {   
+        xorEncrypt(password);
         printf("Site: %s, Password: %s\n", site, password);
     }
     fclose(file);
