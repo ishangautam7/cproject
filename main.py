@@ -7,7 +7,7 @@ def main(args:argparse.ArgumentParser.parse_args) -> None:
     PORT = 587
 
     FROM_EMAIL = "testproject6912@outlook.com"
-    PASSWORD = "testpwm1"
+    PASSWORD = "your_password"
 
     email:str= args.email
     password:str= args.password
